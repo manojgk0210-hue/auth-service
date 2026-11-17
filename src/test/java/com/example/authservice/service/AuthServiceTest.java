@@ -111,10 +111,6 @@ class AuthServiceTest {
     void register_nullEmail_shouldReturnBadRequest() {
         // Arrange
         RegisterRequest request = new RegisterRequest("alice", null, "password123");
-        when(userRepository.existsByUsername("alice")).thenReturn(false);
-        when(userRepository.existsByEmail(null)).thenReturn(false);
-        when(passwordEncoder.encode("password123")).thenReturn("encoded-password");
-        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Act / Assert
         assertThrows(IllegalArgumentException.class, () -> authService.register(request));
