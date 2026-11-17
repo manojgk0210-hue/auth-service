@@ -9,6 +9,7 @@ import com.example.authservice.security.JwtUtil;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,10 @@ public class AuthService {
     }
 
     public UserResponse register(RegisterRequest request) {
+
+        if (request.email() == null || request.email().isBlank()) {
+            throw new IllegalArgumentException("Email is required");
+        }
 
         if (userRepository.existsByUsername(request.username())) {
             throw new ConflictException("Username already exists");
@@ -66,13 +71,16 @@ public class AuthService {
     }
 
     public LoginResponse login(LoginRequest request) {
-
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.username(),
-                        request.password()
-                )
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.username(),
+                            request.password()
+                    )
+            );
+        } catch (BadCredentialsException ex) {
+            throw new ConflictException("Invalid username or password");
+        }
 
         String token = jwtUtil.generateToken(request.username());
 
