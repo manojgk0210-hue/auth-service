@@ -9,7 +9,7 @@ spring:
     url: ${DB_URL:jdbc:postgresql://localhost:5432/authdb}
     driver-class-name: org.postgresql.Driver
     username: ${DB_USERNAME:authuser}
-    password: ${DB_PASSWORD:authpass}
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
@@ -20,5 +20,5 @@ spring:
         format_sql: true
 
 jwt:
-  secret: ${JWT_SECRET:zrpCXCaD3bBF8ur0M8BmHlvJpH1Jyhu3+X/LtRuyTds=}
+  secret: ${JWT_SECRET}
   expiration: ${JWT_EXPIRATION:3600000}
