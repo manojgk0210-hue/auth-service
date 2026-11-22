@@ -31,6 +31,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        // CORS preflights carry no JWT; they must reach Spring Security's CORS handling.
+        return "OPTIONS".equalsIgnoreCase(request.getMethod());
+    }
+
+
+    @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
