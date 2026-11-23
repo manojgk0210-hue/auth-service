@@ -106,6 +106,9 @@ public class SecurityConfig {
 
             .authorizeHttpRequests(auth -> auth
 
+                // Browser CORS preflight requests do not include the JWT.
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
                 .requestMatchers(
                     HttpMethod.POST,
                     "/api/auth/register",
